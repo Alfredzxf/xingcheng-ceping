@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<title>学习能力测评 · 3分钟看清孩子的学习状态</title>
+<style>
+:root{
+  --bg:#f5f6fa; --card:#fff; --ink:#1f2430; --g600:#5b6472; --g500:#8a93a3;
+  --line:#e6e9ef; --purple:#6c5ce7; --purple-bg:#f0edff; --red:#e74c3c;
+  --green:#27ae60; --gold:#f39c12; --blue:#2980b9;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--ink);font-size:15px;line-height:1.65;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.wrap{max-width:520px;margin:0 auto;padding:0 14px 40px;}
+
+/* ===== 首屏 ===== */
+.hero{
+  background:linear-gradient(140deg,#6c5ce7 0%,#8e7bff 55%,#a89bff 100%);
+  color:#fff;border-radius:0 0 22px 22px;padding:30px 22px 26px;margin:0 -14px 18px;
+  text-align:center;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;
+  background:rgba(255,255,255,.10);border-radius:50%;
+}
+.hero .tag{display:inline-block;background:rgba(255,255,255,.20);font-size:12px;
+  padding:4px 12px;border-radius:20px;margin-bottom:12px;font-weight:600;letter-spacing:.5px;}
+.hero h1{margin:0;font-size:23px;font-weight:800;line-height:1.35;}
+.hero .sub{margin:10px 0 0;font-size:13.5px;opacity:.93;}
+.hero .stats{display:flex;justify-content:center;gap:26px;margin-top:18px;}
+.hero .stat b{display:block;font-size:22px;font-weight:800;line-height:1.1;}
+.hero .stat span{font-size:11.5px;opacity:.88;}
+.cta-big{
+  display:block;width:100%;margin-top:20px;padding:14px;border:none;border-radius:12px;
+  background:#fff;color:var(--purple);font-size:16px;font-weight:800;cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.16);
+}
+
+/* ===== 通用卡片 ===== */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px;}
+.card h2{margin:0 0 12px;font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;}
+.card h2 .badge{font-size:11px;background:var(--purple-bg);color:var(--purple);
+  padding:2px 9px;border-radius:20px;font-weight:700;}
+.hint{font-size:12.5px;color:var(--g500);margin:0 0 14px;}
+
+/* ===== 答题 ===== */
+.prog{display:flex;align-items:center;gap:10px;margin:16px 2px 14px;}
+.prog .bar{flex:1;height:7px;background:#e9ebf2;border-radius:20px;overflow:hidden;}
+.prog .bar i{display:block;height:100%;background:linear-gradient(90deg,#6c5ce7,#a89bff);
+  border-radius:20px;transition:width .3s;}
+.prog .txt{font-size:12.5px;color:var(--g600);font-weight:700;white-space:nowrap;}
+
+.q-block{border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:11px;background:#fcfcff;}
+.q-head{font-weight:700;margin-bottom:11px;font-size:15px;line-height:1.5;}
+.q-head .num{display:inline-block;background:var(--purple);color:#fff;font-size:11px;
+  padding:1px 8px;border-radius:6px;margin-right:8px;font-weight:800;}
+.opt{display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid var(--line);
+  border-radius:10px;margin-bottom:7px;cursor:pointer;background:#fff;transition:.12s;font-size:14.5px;}
+.opt:active{transform:scale(.99);}
+.opt.sel{border-color:var(--purple);background:var(--purple-bg);}
+.opt .mark{width:18px;height:18px;border:2px solid #b9bfcc;border-radius:50%;flex-shrink:0;position:relative;}
+.opt.sel .mark{border-color:var(--purple);}
+.opt.sel .mark::after{content:"";position:absolute;inset:3px;background:var(--purple);border-radius:50%;}
+
+.btn{border:none;border-radius:11px;padding:13px 20px;font-size:15px;font-weight:800;cursor:pointer;}
+.btn-primary{background:var(--purple);color:#fff;width:100%;}
+.btn-primary:disabled{background:#c9cbd6;cursor:not-allowed;}
+.btn-ghost{background:#eef0f5;color:var(--ink);}
+
+/* ===== 报告 ===== */
+.score-hero{text-align:center;padding:22px 18px 20px;}
+.score-hero .idx{font-size:46px;font-weight:800;color:var(--purple);line-height:1;}
+.score-hero .idx small{font-size:15px;color:var(--g500);font-weight:600;margin-left:4px;}
+.score-hero .grade{display:inline-block;margin-top:10px;background:var(--purple-bg);
+  color:var(--purple);font-size:14px;font-weight:800;padding:5px 16px;border-radius:20px;}
+.score-hero .say{margin:14px 0 0;font-size:14px;color:var(--g600);line-height:1.7;text-align:left;
+  background:#fafaff;border-radius:10px;padding:13px 14px;}
+
+.dim-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);}
+.dim-row:last-child{border-bottom:none;}
+.dim-row .nm{width:76px;font-size:13.5px;font-weight:700;flex-shrink:0;}
+.dim-row .bar{flex:1;height:8px;background:#eef0f5;border-radius:20px;overflow:hidden;}
+.dim-row .bar i{display:block;height:100%;border-radius:20px;}
+.dim-row .val{width:82px;font-size:12px;color:var(--g600);text-align:right;flex-shrink:0;font-weight:700;}
+
+.alert{border-radius:12px;padding:13px 14px;margin-bottom:12px;font-size:13.5px;line-height:1.6;}
+.alert.warn{background:#fef5e7;border-left:4px solid var(--gold);}
+.alert.risk{background:#fdecea;border-left:4px solid var(--red);}
+.alert.ok{background:#eafaf1;border-left:4px solid var(--green);}
+.alert b{display:block;margin-bottom:3px;font-size:14px;}
+
+.action{background:#fff;border:1px solid var(--line);border-radius:11px;padding:12px 13px;margin-bottom:9px;}
+.action .step{display:inline-block;background:var(--purple);color:#fff;font-size:11px;font-weight:800;
+  padding:1px 8px;border-radius:6px;margin-right:8px;}
+.action .t{font-weight:700;font-size:14.5px;}
+.action .d{font-size:13px;color:var(--g600);margin-top:5px;line-height:1.6;}
+
+/* ===== 留资 ===== */
+.lead{background:linear-gradient(140deg,#6c5ce7,#8e7bff);color:#fff;border-radius:14px;padding:20px 18px;}
+.lead h3{margin:0 0 6px;font-size:17px;font-weight:800;}
+.lead p{margin:0 0 15px;font-size:13px;opacity:.94;line-height:1.6;}
+.lead label{display:block;font-size:12.5px;margin:10px 0 5px;opacity:.95;font-weight:700;}
+.lead input{width:100%;padding:12px;border:none;border-radius:9px;font-size:15px;font-family:inherit;}
+.lead .btn-lead{width:100%;margin-top:16px;padding:13px;border:none;border-radius:10px;
+  background:#fff;color:var(--purple);font-size:15.5px;font-weight:800;cursor:pointer;}
+.lead .privacy{font-size:11.5px;opacity:.85;margin-top:11px;line-height:1.55;}
+
+.done{text-align:center;padding:26px 18px;}
+.done .ic{font-size:44px;}
+.done h3{margin:12px 0 8px;font-size:18px;font-weight:800;}
+.done p{font-size:13.5px;color:var(--g600);line-height:1.7;margin:0;}
+
+.foot{text-align:center;font-size:11.5px;color:var(--g500);margin-top:22px;line-height:1.7;}
+.hide{display:none!important;}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 首屏 ═══════════ -->
+<div id="s-intro" class="wrap">
+  <div class="hero">
+    <div class="tag">学习能力测评</div>
+    <h1>3分钟，看清孩子的<br>学习状态差在哪</h1>
+    <p class="sub">8 道题，测出 8 个学习习惯的真实水平</p>
+    <div class="stats">
+      <div class="stat"><b>8</b><span>道题</span></div>
+      <div class="stat"><b>3</b><span>分钟</span></div>
+      <div class="stat"><b>8</b><span>个维度</span></div>
+    </div>
+    <button class="cta-big" onclick="startQuiz()">开始测评</button>
+  </div>
+
+  <div class="card">
+    <h2>测什么？</h2>
+    <p class="hint">不是考试，不排名，只看这 8 件事孩子做得怎么样：</p>
+    <div class="dim-row"><span class="nm">限时学习</span><span class="val">每天能主动学多久</span></div>
+    <div class="dim-row"><span class="nm">计划学习</span><span class="val">会不会定计划并执行</span></div>
+    <div class="dim-row"><span class="nm">课前预习</span><span class="val">上课前做不做准备</span></div>
+    <div class="dim-row"><span class="nm">有效听课</span><span class="val">上课能不能专注</span></div>
+    <div class="dim-row"><span class="nm">有效复习</span><span class="val">课后怎么巩固</span></div>
+    <div class="dim-row"><span class="nm">优质作业</span><span class="val">作业独立完成度</span></div>
+    <div class="dim-row"><span class="nm">错题管理</span><span class="val">错题整不整理、回不回顾</span></div>
+    <div class="dim-row"><span class="nm">考试管理</span><span class="val">考后复不复盘</span></div>
+  </div>
+
+  <div class="card">
+    <h2>测完得到什么</h2>
+    <div class="action"><span class="step">1</span><span class="t">学习能力指数</span>
+      <div class="d">一个 0~1 的指数，一眼看清当前水平</div></div>
+    <div class="action"><span class="step">2</span><span class="t">8 项逐项差距</span>
+      <div class="d">每项显示「得分 / 满分」，差多少看得见</div></div>
+    <div class="action"><span class="step">3</span><span class="t">本周 3 个小动作</span>
+      <div class="d">不用等开学，今晚就能开始练</div></div>
+  </div>
+
+  <p class="foot">本测评用于了解学习习惯现状，不构成任何医学或心理诊断<br>结果仅供参考</p>
+</div>
+
+<!-- ═══════════ 答题 ═══════════ -->
+<div id="s-quiz" class="wrap hide">
+  <div class="prog">
+    <div class="bar"><i id="prog-bar" style="width:0%"></i></div>
+    <span class="txt" id="prog-txt">1 / 8</span>
+  </div>
+  <div id="q-list"></div>
+  <button class="btn btn-primary" id="btn-submit" disabled onclick="submitQuiz()">提交并查看报告</button>
+  <button class="btn btn-ghost" style="width:100%;margin-top:10px;" onclick="backIntro()">返回</button>
+</div>
+
+<!-- ═══════════ 报告 ═══════════ -->
+<div id="s-report" class="wrap hide">
+  <div class="card score-hero">
+    <div class="idx" id="r-idx">0.00<small>/ 1.00</small></div>
+    <div class="grade" id="r-grade">—</div>
+    <p class="say" id="r-say"></p>
+  </div>
+
+  <div class="card">
+    <h2>逐项差距 <span class="badge">虚线为达标线 70%</span></h2>
+    <div id="r-dims"></div>
+  </div>
+
+  <div id="r-alert"></div>
+
+  <div class="card">
+    <h2>本周 3 个小动作</h2>
+    <div id="r-actions"></div>
+  </div>
+
+  <div class="lead">
+    <h3>想看看具体差在哪、怎么补？</h3>
+    <p>留个联系方式，我们给孩子做一次免费的学习习惯解读，告诉你哪一项最值得先抓。</p>
+    <label for="f-name">孩子昵称（可不填）</label>
+    <input id="f-name" type="text" placeholder="怎么称呼都行" maxlength="10">
+    <label for="f-contact">手机号 / 微信号（必填）</label>
+    <input id="f-contact" type="text" placeholder="方便我们联系你" maxlength="30">
+    <button class="btn-lead" onclick="submitLead()">提交，领取免费解读</button>
+    <p class="privacy">我们只用这个联系方式与你联系，不做他用，可随时要求删除。</p>
+  </div>
+
+  <button class="btn btn-ghost" style="width:100%;margin-top:12px;" onclick="restart()">重新测一次</button>
+  <p class="foot">本测评用于了解学习习惯现状，不构成任何医学或心理诊断<br>结果仅供参考</p>
+</div>
+
+<!-- ═══════════ 提交成功 ═══════════ -->
+<div id="s-done" class="wrap hide">
+  <div class="card done">
+    <div class="ic">✅</div>
+    <h3>提交成功</h3>
+    <p>我们会尽快联系你，给孩子做一次免费的学习习惯解读。<br>也可以把这份报告转给家里其他人看。</p>
+  </div>
+  <button class="btn btn-primary" onclick="restart()">返回首页</button>
+</div>
+
+<script>
+/* ═══════════ 题库：8 题，从星程学能诊断 V2.2 原样选取 ═══════════ */
+var QUESTIONS = [
+  {dim:'限时学习', q:'每天除了完成作业，你能主动安排学习的时间大概有多少？', opts:[
+    {t:'1小时以上', s:5},{t:'30分钟 - 1小时', s:4},{t:'10 - 30分钟', s:3},{t:'几乎没有', s:2}]},
+  {dim:'计划学习', q:'关于学习计划，你的实际情况是？', opts:[
+    {t:'有详细计划并严格执行', s:4},{t:'有大致计划', s:3},{t:'偶尔制定但不执行', s:2},{t:'从不制定计划', s:1}]},
+  {dim:'课前预习', q:'关于课前预习，你的实际情况是？', opts:[
+    {t:'每节课前都预习', s:4},{t:'经常预习', s:3},{t:'偶尔预习', s:2},{t:'从不预习', s:1}]},
+  {dim:'有效听课', q:'上课的时候，你的状态通常是？', opts:[
+    {t:'整节课都专注', s:2},{t:'大部分时间专注', s:1},{t:'经常走神', s:0}]},
+  {dim:'有效复习', q:'课后你是怎么复习的？', opts:[
+    {t:'当天复习 + 周末总结', s:4},{t:'当天简单回顾', s:3},{t:'考试前才翻看', s:2},{t:'从不复习', s:1}]},
+  {dim:'优质作业', q:'作业完成的情况通常是？', opts:[
+    {t:'完全独立完成', s:4},{t:'大部分独立完成', s:3},{t:'经常需要帮助', s:2},{t:'依赖抄答案或他人', s:1}]},
+  {dim:'错题管理', q:'错题你是怎么处理的？', opts:[
+    {t:'每道错题都整理并定期回顾', s:4},{t:'整理但不回顾', s:3},{t:'偶尔整理', s:2},{t:'从不整理', s:1}]},
+  {dim:'考试管理', q:'考完试后你会怎么复盘？', opts:[
+    {t:'每次都详细分析错因', s:5},{t:'经常分析', s:4},{t:'偶尔看看', s:3},{t:'考完就不管了', s:1}]}
+];
+
+/* 每项满分（按题库最高分）*/
+var DIM_MAX = {};
+QUESTIONS.forEach(function(q){
+  var mx = 0; q.opts.forEach(function(o){ if(o.s>mx) mx=o.s; });
+  DIM_MAX[q.dim] = mx;
+});
+
+var answers = new Array(QUESTIONS.length).fill(null);
+
+/* ═══════════ 埋点：渠道码 ═══════════ */
+function getChannel(){
+  var m = location.search.match(/[?&](?:ch|channel)=([^&]+)/);
+  return m ? decodeURIComponent(m[1]) : 'direct';
+}
+
+function show(id){
+  ['s-intro','s-quiz','s-report','s-done'].forEach(function(s){
+    document.getElementById(s).classList.toggle('hide', s!==id);
+  });
+  window.scrollTo(0,0);
+}
+
+function startQuiz(){ show('s-quiz'); renderQuiz(); }
+function backIntro(){ show('s-intro'); }
+
+function renderQuiz(){
+  var list = document.getElementById('q-list');
+  var html = '';
+  QUESTIONS.forEach(function(q,i){
+    html += '<div class="q-block"><div class="q-head"><span class="num">'+(i+1)+'</span>'+q.q+'</div>';
+    q.opts.forEach(function(o,j){
+      var sel = answers[i]===j ? ' sel' : '';
+      html += '<div class="opt'+sel+'" onclick="pick('+i+','+j+')">'
+            +   '<span class="mark"></span><span>'+o.t+'</span></div>';
+    });
+    html += '</div>';
+  });
+  list.innerHTML = html;
+  updateProgress();
+}
+
+function pick(i,j){ answers[i] = j; renderQuiz(); }
+
+function updateProgress(){
+  var done = answers.filter(function(a){ return a!==null; }).length;
+  var pct = Math.round(done/QUESTIONS.length*100);
+  document.getElementById('prog-bar').style.width = pct+'%';
+  document.getElementById('prog-txt').textContent = (done) + ' / ' + QUESTIONS.length;
+  document.getElementById('btn-submit').disabled = (done !== QUESTIONS.length);
+}
+
+/* ═══════════ 算分与报告 ═══════════ */
+function submitQuiz(){
+  var dims = [];
+  QUESTIONS.forEach(function(q,i){
+    dims.push({dim:q.dim, score:q.opts[answers[i]].s, max:DIM_MAX[q.dim]});
+  });
+  var got=0, total=0;
+  dims.forEach(function(d){ got+=d.score; total+=d.max; });
+  var idx = total>0 ? got/total : 0;
+
+  // 指数（保留2位）
+  document.getElementById('r-idx').innerHTML = idx.toFixed(2)+'<small> / 1.00</small>';
+
+  // 评级
+  var grade, say;
+  if (idx >= 0.75){ grade='优·A档'; say='学习习惯的底子很好，各项都比较稳。接下来可以把重点放在"更难的事"上——比如让孩子试着把学过的东西讲给别人听，或者挑战需要举一反三的题。'; }
+  else if (idx >= 0.60){ grade='良·B档'; say='你有一定的学习方法，底子不错，但还有几项明显拖后腿。建议先把最弱的那一两项抓起来，不用全改——抓牢一项，指数就能明显往上走。'; }
+  else if (idx >= 0.40){ grade='中·C档'; say='有几项基础习惯还没建立起来，这不是态度问题，是方法没到位。好消息是：这类习惯补起来最快，通常几周就能看到变化。'; }
+  else { grade='弱·D档'; say='大部分学习习惯还没成型，孩子很可能处在"想学但不知道怎么学"的状态。这个阶段最需要的不是补课，是先把最基本的两三件事立起来。'; }
+  document.getElementById('r-grade').textContent = grade;
+  document.getElementById('r-say').textContent = say;
+
+  // 逐项
+  var dh = '';
+  dims.forEach(function(d){
+    var pct = d.max>0 ? Math.round(d.score/d.max*100) : 0;
+    var color = pct>=70 ? 'var(--green)' : (pct>=40 ? 'var(--gold)' : 'var(--red)');
+    dh += '<div class="dim-row"><span class="nm">'+d.dim+'</span>'
+        +  '<span class="bar"><i style="width:'+pct+'%;background:'+color+'"></i></span>'
+        +  '<span class="val">'+d.score+'/'+d.max+' · '+pct+'%</span></div>';
+  });
+  document.getElementById('r-dims').innerHTML = dh;
+
+  // 预警：最弱项 + 目标
+  var sorted = dims.slice().sort(function(a,b){ return (a.score/a.max)-(b.score/b.max); });
+  var worst = sorted[0], second = sorted[1];
+  var wpct = worst.max>0 ? Math.round(worst.score/worst.max*100) : 0;
+  var spct = second.max>0 ? Math.round(second.score/second.max*100) : 0;
+
+  var ah = '';
+  if (wpct < 40){
+    ah += '<div class="alert risk"><b>最需要先抓：'+worst.dim+'（'+wpct+'%）</b>'
+       +  '这一项是目前最弱的，也是提升空间最大的一项。建议先只改这一项，别的同时抓。</div>';
+  } else if (wpct < 70){
+    ah += '<div class="alert warn"><b>可以再提一提：'+worst.dim+'（'+wpct+'%）</b>'
+       +  '这一项还没到达标线，是眼下性价比最高的突破口。</div>';
+  } else {
+    ah += '<div class="alert ok"><b>各项都在达标线以上</b>'
+       +  '基础习惯比较稳，可以把目标转向"用得更活"。</div>';
+  }
+  if (spct < 70){
+    ah += '<div class="alert warn"><b>其次关注：'+second.dim+'（'+spct+'%）</b>'
+       +  '第一项稳住之后，再动这一项。</div>';
+  }
+  // 增量目标（借竞品呈现方式）
+  var gap = total>0 ? Math.max(0, Math.round((0.70 - idx)*100)/100) : 0;
+  if (gap > 0){
+    ah += '<div class="alert ok"><b>下一步目标</b>'
+       +  '力争在 3 周内让学习能力指数从 '+idx.toFixed(2)+' 提升到 '+(idx+gap).toFixed(2)+' 以上'
+       + '（达标线 0.70）。抓最弱的一两项就够了。</div>';
+  }
+  document.getElementById('r-alert').innerHTML = ah;
+
+  // 3 个小动作：按最弱项给
+  var ACTIONS = {
+    '限时学习':[{t:'固定一个"自主学习时段"',d:'每天选一个 25 分钟的时段，只做一件事：复习或预习。时间不到不停，时间一到就停。'},
+                {t:'用计时器，不用感觉',d:'把手机计时器开着，让孩子看见时间在走。看得见的时间才管得住。'},
+                {t:'先记一周账',d:'每天只记录"今天自主学了多久"，不评价好坏。一周后自己会发现问题。'}],
+    '计划学习':[{t:'每晚列 3 件事',d:'睡前用 2 分钟写下明天要做的 3 件事，只写 3 件，不写满。'},
+                {t:'完成一项划掉一项',d:'划掉的动作本身就是奖励，孩子看得见自己在推进。'},
+                {t:'周末回顾一次',d:'周末花 5 分钟看这周划掉了多少、卡在哪。计划是越改越准的。'}],
+    '课前预习':[{t:'预习只做 3 分钟',d:'上课前 3 分钟，翻到要学的那一页，只看标题和加粗的字。'},
+                {t:'带着一个疑问听课',d:'预习时找一个"看不懂的地方"，上课就等着听这一句。'},
+                {t:'从最难的科目开始',d:'先预习最怕的那一科，其他科会跟着变容易。'}],
+    '有效听课':[{t:'上课只抓一件事',d:'这节课只求听懂一个点，不求全懂。抓住一个就是胜利。'},
+                {t:'笔记只记"没听过的"',d:'已经会的不写，只写新讲的和听懵的。笔记越短越会看。'},
+                {t:'坐姿和桌面先收拾',d:'桌上只留当前这一科的东西，分心的东西先收走。'}],
+    '有效复习':[{t:'当天内容当天过一遍',d:'晚上用 5 分钟把今天学的内容在脑子里过一遍，想不起来的翻书。'},
+                {t:'周末做一次小总结',d:'周末把这周的内容用几句话写下来，写不出就是没真懂。'},
+                {t:'合上书再回忆',d:'复习时合上书本回想，比盯着书看有效得多。'}],
+    '优质作业':[{t:'先自己做，卡住再问',d:'规定自己先想 3 分钟，想不出来再问。别一不会就喊。'},
+                {t:'不会的题做记号',d:'不会的题目标出来，第二天问老师，别空着也别抄。'},
+                {t:'作业前先收拾桌面',d:'只放当前这一科，其他全收走。桌面越干净，做得越快。'}],
+    '错题管理':[{t:'建一个错题本',d:'不用抄全题，只记"错在哪、正确思路是什么"两句话。'},
+                {t:'每周回顾一次',d:'每周翻一次错题本，遮住答案重做。做对的划掉。'},
+                {t:'错题只分三类',d:'粗心错的、没记住的、真不会的。分好类才知道该练什么。'}],
+    '考试管理':[{t:'考完当天分析错题',d:'趁还记得，当天把错题分成"粗心/没记住/不会"三类。'},
+                {t:'统计每类丢多少分',d:'粗心类的分最容易拿回来，先抓这部分。'},
+                {t:'写下一条改进',d:'每次考试只改一个习惯，比如"读题圈条件"。一条就够。'}]
+  };
+  var acts = ACTIONS[worst.dim] || ACTIONS['限时学习'];
+  var actHtml = '';
+  acts.forEach(function(a,i){
+    actHtml += '<div class="action"><span class="step">'+(i+1)+'</span><span class="t">'+a.t+'</span>'
+            +  '<div class="d">'+a.d+'</div></div>';
+  });
+  document.getElementById('r-actions').innerHTML = actHtml;
+
+  show('s-report');
+}
+
+/* ═══════════ 留资提交（当前写本地，二期接表单）═══════ */
+function submitLead(){
+  var contact = document.getElementById('f-contact').value.trim();
+  if (!contact){ alert('请填写手机号或微信号，方便我们联系你'); return; }
+  var name = document.getElementById('f-name').value.trim();
+
+  // 本地留一份（二期替换为表单提交）
+  var record = {
+    channel: getChannel(),
+    name: name,
+    contact: contact,
+    answers: answers,
+    time: new Date().toISOString()
+  };
+  try { localStorage.setItem('xc_lead_'+Date.now(), JSON.stringify(record)); } catch(e){}
+
+  show('s-done');
+}
+
+function restart(){
+  answers = new Array(QUESTIONS.length).fill(null);
+  document.getElementById('f-name').value='';
+  document.getElementById('f-contact').value='';
+  show('s-intro');
+}
+</script>
+</body>
+</html>
